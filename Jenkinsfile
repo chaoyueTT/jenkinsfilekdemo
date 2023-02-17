@@ -37,7 +37,7 @@ pipeline{
                sh 'pwd && ls -alh'
                sh 'echo ${WS}'
                // sh 'mv ${WS}/${IMAGE_NAME}/target/*.jar ${WS}/${IMAGE_NAME}.jar && pwd && ls -alh && docker build -t ${IMAGE_NAME} .'
-               sh 'docker build -t ${IMAGE_NAME} -f Dockerfile ${WS}/${IMAGE_NAME}/target/'
+               sh 'docker build -t ${IMAGE_NAME} -f Dockerfile ~/${IMAGE_NAME}/target/'
             }
         }
 
