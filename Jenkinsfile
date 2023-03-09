@@ -12,9 +12,9 @@ pipeline {
         }
 
     environment {
-            ENVIRONMENT = params.ENVIRONMENT
-            MODULE_PATH = params.MODULE_PATH
-            MODULE = params.MODULE
+            ENVIRONMENT = parameters.ENVIRONMENT
+            MODULE_PATH = parameters.MODULE_PATH
+            MODULE = parameters.MODULE
         }
 
     stages {
