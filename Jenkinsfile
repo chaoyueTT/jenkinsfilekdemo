@@ -8,9 +8,9 @@ pipeline {
         }
 
         environment {
-            ENVIRONMENT = params.ENVIRONMENT
-            MODULE_PATH = params.MODULE_PATH
-            MODULE = params.MODULE
+            ENVIRONMENT = 'prod'
+            MODULE_PATH = ''
+            MODULE = 'rouyi-admin'
         }
 
     stages {
@@ -34,7 +34,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
-                sh 'docker-compose build'
+                sh 'docker build -t app-${MODULE_PATH}-${MODULE} .'
             }
         }
 
