@@ -17,7 +17,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Spring Boot application...'
-                sh './mvnw clean install'
+                sh 'mvn clean install'
             }
         }
 
@@ -27,7 +27,7 @@ pipeline {
             }
             steps {
                 echo 'Testing Spring Boot application in dev environment...'
-                sh './mvnw test'
+                sh 'mvn test'
             }
         }
 
