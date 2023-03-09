@@ -27,7 +27,7 @@ pipeline {
 
         stage('Test') {
             when {
-                expression { params.ENVIRONMENT == 'dev' }
+                expression { environment.ENVIRONMENT == 'dev' }
             }
             steps {
                 echo 'Testing Spring Boot application in dev environment...'
@@ -38,23 +38,23 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
-                sh "docker build -t app-${MODULE_PATH}-${MODULE} ."
+                sh "docker build -t app-${environment.MODULE_PATH}-${environment.MODULE} ."
             }
         }
 
         stage('Deploy') {
             when {
-                expression { params.ENVIRONMENT == 'prod' }
+                expression { environment.ENVIRONMENT == 'prod' }
             }
             steps {
                 echo 'Deploying Spring Boot application to production environment...'
                 script {
-                    if (params.ENVIRONMENT == 'prod') {
+                    if (environment.ENVIRONMENT == 'prod') {
                         def remote = [
                             host: '172.30.239.255',
                             user: 'root',
                             keyFile: '',
-                            script: "./deploy.sh ${params.ENVIRONMENT} ${params.MODULE_PATH} ${params.MODULE}"
+                            script: "./deploy.sh ${environment.ENVIRONMENT} ${environment.MODULE_PATH} ${environment.MODULE}"
                         ]
                         def sshCommand = "ssh -i ${remote.keyFile} ${remote.user}@${remote.host} '${remote.script}'"
                         sh sshCommand
