@@ -1,0 +1,27 @@
+version: "3.4"
+
+x-submodule: &submodule
+  environment:
+    TZ: Asia/Shanghai
+    SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+    HOST: ${HOST}
+  logging:
+    options:
+      max-size: 500m
+  volumes:
+    - /etc/hosts:/etc/hosts
+  restart: always
+  entrypoint: [
+    "java",
+    "-Djava.security.egd=file:/dev/./urandom",
+    "-jar",
+    "/usr/java/app.jar",
+  ]
+
+services:
+  ruoyi-admin:
+    <<: *submodule
+    container_name: ruoyi-admin
+    image: ruoyi-admin:${TAG}
+    ports:
+      - "60040:8080"

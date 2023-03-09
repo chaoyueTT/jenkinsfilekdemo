@@ -1,52 +1,61 @@
-pipeline{
+pipeline {
     agent any
-    environment {
-      IMAGE_NAME = "ruoyi-admin"
-      WS = "${WORKSPACE}"
-    }
 
-    //定义流水线的加工流程
+    parameters {
+            string(name: 'ENVIRONMENT', defaultValue: 'dev', description: 'The target environment')
+            string(name: 'MODULE_PATH', defaultValue: '', description: 'The parent module name to deploy')
+            string(name: 'MODULE', defaultValue: '', description: 'The module name to deploy')
+        }
+
+        environment {
+            ENVIRONMENT = params.ENVIRONMENT
+            MODULE_PATH = params.MODULE_PATH
+            MODULE = params.MODULE
+        }
+
     stages {
-        //流水线的所有阶段
-        stage('1.环境检查'){
+        stage('Build') {
             steps {
-               sh 'pwd && ls -alh'
-               sh 'printenv'
-               sh 'docker version'
-               sh 'java -version'
-               sh 'git --version'
+                echo 'Building Spring Boot application...'
+                sh './mvnw clean install'
             }
         }
 
-        stage('2.编译'){
-            agent {
-                docker {
-                    image 'maven:3-alpine'
-                    args '-v maven-repository:/root/.m2'
-                 }
+        stage('Test') {
+            when {
+                environment name: 'ENVIRONMENT', value: 'dev'
             }
             steps {
-               sh 'pwd && ls -alh'
-               sh 'mvn -v'
-               sh 'mvn clean package -Dmaven.test.skip=true'
+                echo 'Testing Spring Boot application in dev environment...'
+                sh './mvnw test'
             }
         }
 
-        stage('3.打包'){
+        stage('Build Docker Image') {
             steps {
-               sh 'pwd && ls -alh'
-               sh 'echo ${WS}'
-               // sh 'mv ${WS}/${IMAGE_NAME}/target/*.jar ${WS}/${IMAGE_NAME}.jar && pwd && ls -alh && docker build -t ${IMAGE_NAME} .'
-               sh 'docker build -t ${IMAGE_NAME} -f Dockerfile .'
+                echo 'Building Docker image...'
+                sh 'docker-compose build'
             }
         }
 
-        stage('4.部署'){
-            // 删除容器和虚悬镜像
+        stage('Deploy') {
+            when {
+                environment name: 'ENVIRONMENT', value: 'prod'
+            }
             steps {
-               sh 'pwd && ls -alh'
-               sh 'docker rm -f ${IMAGE_NAME} || true && docker rmi $(docker images -q -f dangling=true) || true'
-               sh 'docker run -d -p 8081:8081 --name ${IMAGE_NAME} -v /mydata/logs/${IMAGE_NAME}:/logs/${IMAGE_NAME} ${IMAGE_NAME}'
+                echo 'Deploying Spring Boot application to production environment...'
+                script {
+                    if (env.ENVIRONMENT == 'prod') {
+                        def remote = [
+                            host: '172.30.239.255',
+                            user: 'root',
+                            keyFile: '',
+                            script: "./deploy.sh ${env.ENVIRONMENT} ${env.MODULE_PATH} ${env.MODULE}"
+                        ]
+                        def sshCommand = "ssh -i ${remote.keyFile} ${remote.user}@${remote.host} '${remote.script}'"
+                        sh sshCommand
+                    }
+                }
             }
         }
     }
