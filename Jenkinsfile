@@ -12,9 +12,9 @@ pipeline {
         }
 
     environment {
-            ENVIRONMENT = parameters.ENVIRONMENT
-            MODULE_PATH = parameters.MODULE_PATH
-            MODULE = parameters.MODULE
+            ENVIRONMENT = 'prod'
+            MODULE_PATH = ''
+            MODULE = 'ruoyi-admin'
         }
 
     stages {
