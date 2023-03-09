@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+     agent {
+        docker {
+            image 'maven:3.6.3-jdk-8'
+        }
+     }
 
     parameters {
             string(name: 'ENVIRONMENT', defaultValue: 'dev', description: 'The target environment')
@@ -14,6 +18,11 @@ pipeline {
         }
 
     stages {
+        stage('Install Maven') {
+            steps {
+                sh 'which mvn || apt-get update && apt-get install -y maven'
+            }
+        }
         stage('Build') {
             steps {
                 echo 'Building Spring Boot application...'
