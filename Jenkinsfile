@@ -11,18 +11,13 @@ pipeline {
             string(name: 'MODULE', defaultValue: '', description: 'The module name to deploy')
         }
 
-        environment {
-            ENVIRONMENT = 'prod'
-            MODULE_PATH = ''
-            MODULE = 'rouyi-admin'
+    environment {
+            ENVIRONMENT = params.ENVIRONMENT
+            MODULE_PATH = params.MODULE_PATH
+            MODULE = params.MODULE
         }
 
     stages {
-        stage('Install Maven') {
-            steps {
-                sh 'which mvn || apt-get update && apt-get install -y maven'
-            }
-        }
         stage('Build') {
             steps {
                 echo 'Building Spring Boot application...'
@@ -32,7 +27,7 @@ pipeline {
 
         stage('Test') {
             when {
-                environment name: 'ENVIRONMENT', value: 'dev'
+                expression { params.ENVIRONMENT == 'dev' }
             }
             steps {
                 echo 'Testing Spring Boot application in dev environment...'
@@ -43,23 +38,23 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
-                sh 'docker build -t app-${MODULE_PATH}-${MODULE} .'
+                sh "docker build -t app-${MODULE_PATH}-${MODULE} ."
             }
         }
 
         stage('Deploy') {
             when {
-                environment name: 'ENVIRONMENT', value: 'prod'
+                expression { params.ENVIRONMENT == 'prod' }
             }
             steps {
                 echo 'Deploying Spring Boot application to production environment...'
                 script {
-                    if (env.ENVIRONMENT == 'prod') {
+                    if (params.ENVIRONMENT == 'prod') {
                         def remote = [
                             host: '172.30.239.255',
                             user: 'root',
                             keyFile: '',
-                            script: "./deploy.sh ${env.ENVIRONMENT} ${env.MODULE_PATH} ${env.MODULE}"
+                            script: "./deploy.sh ${params.ENVIRONMENT} ${params.MODULE_PATH} ${params.MODULE}"
                         ]
                         def sshCommand = "ssh -i ${remote.keyFile} ${remote.user}@${remote.host} '${remote.script}'"
                         sh sshCommand
