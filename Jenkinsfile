@@ -1,9 +1,5 @@
 pipeline {
-     agent {
-        docker {
-            image 'maven:3.6.3-jdk-8'
-        }
-     }
+     agent any
 
     parameters {
             string(name: 'ENVIRONMENT', defaultValue: 'dev', description: 'The target environment')
