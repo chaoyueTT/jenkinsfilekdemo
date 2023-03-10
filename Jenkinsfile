@@ -44,7 +44,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
-                sh "docker build ."
+                sh "docker build . ${env.MODULE}"
             }
         }
 
