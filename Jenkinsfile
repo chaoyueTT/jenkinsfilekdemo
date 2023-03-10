@@ -9,7 +9,7 @@ pipeline {
 
     environment {
             ENVIRONMENT = 'prod'
-            MODULE_PATH = 'ruoyi-vue'
+            MODULE_PATH = ''
             MODULE = 'ruoyi-admin'
         }
 
