@@ -15,6 +15,11 @@ pipeline {
 
     stages {
         stage('Build') {
+             agent {
+        docker {
+            image 'maven:3.6.3-jdk-8'
+        }
+     }
             steps {
                 echo 'Building Spring Boot application...'
                 sh 'mvn clean install'
@@ -25,6 +30,11 @@ pipeline {
             when {
                 expression { env.ENVIRONMENT == 'dev' }
             }
+             agent {
+        docker {
+            image 'maven:3.6.3-jdk-8'
+        }
+     }
             steps {
                 echo 'Testing Spring Boot application in dev environment...'
                 sh 'mvn test'
