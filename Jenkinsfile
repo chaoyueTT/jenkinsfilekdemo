@@ -39,7 +39,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
-                sh "docker build --build-arg MODULE=${env.MODULE} --build-arg MODULE_PATH=${env.MODULE_PATH} -t /${env.MODULE}:latest ."
+                sh "docker build --build-arg MODULE=${env.MODULE} --build-arg MODULE_PATH=${env.MODULE_PATH} -t ${env.MODULE}:latest ."
             }
         }
 
