@@ -15,11 +15,11 @@ pipeline {
 
     stages {
         stage('Build') {
-             agent{
-                  docker{
-                       image 'maven:3.6.3-jdk-8'
+             agent {
+                  docker {
+                      image 'maven:3.6.3-jdk-8'
                   }
-             }
+               }
             steps {
                 echo 'Building Spring Boot application...'
                 sh 'mvn clean install'
