@@ -55,7 +55,7 @@ pipeline {
                             host: '172.30.239.255',
                             user: 'root',
                             keyFile: '',
-                            script: "./deploy.sh ${env.ENVIRONMENT} ${env.MODULE_PATH} ${env.MODULE}"
+                            script: "./deploy.sh ${env.ENVIRONMENT} ${env.MODULE}"
                         ]
                         def sshCommand = "ssh -i ${remote.keyFile} ${remote.user}@${remote.host} '${remote.script}'"
                         sh sshCommand
