@@ -52,7 +52,7 @@ pipeline {
                 script {
                     if (env.ENVIRONMENT == 'prod') {
                         def remote = [
-                            host: '172.30.239.255',
+                            host: '172.31.79.255',
                             user: 'root',
                             keyFile: '',
                             script: "./deploy.sh ENVIRONMENT=${env.ENVIRONMENT} MODULE=${env.MODULE}"
