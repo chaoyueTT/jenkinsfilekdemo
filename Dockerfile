@@ -5,4 +5,4 @@ LABEL group="RuoYi-Vue"
 RUN mkdir -p /usr/java
 # Setting application source code working directory
 WORKDIR /usr/java/
-COPY ./target/*.jar  /usr/java/app.jar
+COPY *.jar  /usr/java/app.jar
