@@ -50,7 +50,7 @@ pipeline {
             steps {
                 echo 'Deploying Spring Boot application to production environment...'
                 script {
-                    if (environment.ENVIRONMENT == 'prod') {
+                    if (env.ENVIRONMENT == 'prod') {
                         def remote = [
                             host: '172.30.239.255',
                             user: 'root',
