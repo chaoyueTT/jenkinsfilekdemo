@@ -51,14 +51,14 @@ pipeline {
                 echo 'Deploying Spring Boot application to production environment...'
                 script {
                     if (env.ENVIRONMENT == 'prod') {
-                        def remote = [
-                            host: '172.31.79.255',
-                            user: 'root',
-                            keyFile: '',
-                            script: "./deploy.sh ENVIRONMENT=${env.ENVIRONMENT} MODULE=${env.MODULE}"
-                        ]
-                        def sshCommand = "ssh -i ${remote.keyFile} ${remote.user}@${remote.host} '${remote.script}'"
-                        sh sshCommand
+//                         def remote = [
+//                             host: '172.31.79.255',
+//                             user: 'root',
+//                             keyFile: '',
+//                             script: "./deploy.sh ENVIRONMENT=${env.ENVIRONMENT} MODULE=${env.MODULE}"
+//                         ]
+//                         def sshCommand = "ssh -i ${remote.keyFile} ${remote.user}@${remote.host} '${remote.script}'"
+                        sh "./deploy.sh ENVIRONMENT=${env.ENVIRONMENT} MODULE=${env.MODULE}"
                     }
                 }
             }
