@@ -58,6 +58,7 @@ pipeline {
 //                             script: "./deploy.sh ENVIRONMENT=${env.ENVIRONMENT} MODULE=${env.MODULE}"
 //                         ]
 //                         def sshCommand = "ssh -i ${remote.keyFile} ${remote.user}@${remote.host} '${remote.script}'"
+                        sh "chmod 777 -R ${env.WORKSPACE}"
                         sh "./deploy.sh ENVIRONMENT=${env.ENVIRONMENT} MODULE=${env.MODULE}"
                     }
                 }
