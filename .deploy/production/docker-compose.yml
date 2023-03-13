@@ -4,7 +4,7 @@ x-submodule: &submodule
   environment:
     TZ: Asia/Shanghai
     SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
-    HOST: ${HOST}
+    HOST: 127.0.0.1
   logging:
     options:
       max-size: 500m
@@ -22,6 +22,6 @@ services:
   ruoyi-admin:
     <<: *submodule
     container_name: ruoyi-admin
-    image: ruoyi-admin:${TAG}
+    image: ruoyi-admin:latest
     ports:
       - "60040:8080"
